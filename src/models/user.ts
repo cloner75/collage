@@ -11,6 +11,10 @@ const userSchema = new Schema(
     username: { type: String, required: true, index: true, unique: true },
     password: { type: String, required: true },
     status: { type: String, required: true },
+    name: { type: String, required: false },
+    family: { type: String, required: false },
+    mobile: { type: String, required: false },
+    avatar: { type: String, required: false },
   },
   { versionKey: false }
 );

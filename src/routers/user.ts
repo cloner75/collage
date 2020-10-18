@@ -16,5 +16,7 @@ export default (router) => {
   router
     .post(Names.ROOT, User.create)
     .get(Names.ROOT, User.find)
-    .get(Names.PARAM, User.findOne);
+    .get(Names.PARAM, User.findOne)
+    .put(Names.PARAM, User.update)
+    .delete(Names.PARAM, User.delete);
 };

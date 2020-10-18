@@ -23,9 +23,9 @@ export const appSetting = (express): any => {
  * @param {string} dbName
  */
 export const mongoConnection = (
+  dbName: string = "typeScript",
   port: number = 27017,
   host: string = "localhost",
-  dbName: string = "typeScript"
 ): void => {
   mongoose.connect(
     `mongodb://${host}:${port}/${dbName}`,
@@ -39,7 +39,7 @@ export const mongoConnection = (
       if (err) {
         console.log("Mongo Is Down");
       } else {
-        console.log(`Mongo Is Runnign On Port: ${port}`);
+        console.log(`Mongo Is Runnign On Port: ${Number(port)}`);
       }
     }
   );
@@ -57,7 +57,7 @@ export const startServer = (
   message: string = "App Is Running On Port: "
 ): void => {
   app.listen(port, () => {
-    mongoConnection();
+    mongoConnection(process.env.DB_NAME);
     console.log(message, port);
   });
 };
