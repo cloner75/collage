@@ -1,12 +1,17 @@
 // Packages
+
 import * as express from "express";
+import * as dotenv from "dotenv";
 
 // Connections
 import { appSetting, startServer } from "./src/helpers/connection";
-import userRoutes from "./src/routers/user";
+import routes from "./src/routers";
+
+dotenv.config();
 
 const app: any = appSetting(express);
 
-startServer(app, 4000);
+startServer(app, Number(process.env.PORT));
 
-app.use(userRoutes);
+app.use(routes);
+ 

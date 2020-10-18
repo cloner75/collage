@@ -1,26 +1,20 @@
 // Packages
-import { Router } from "express";
 
 // Controllers
-// import UserController from "./../controller/user";
+import UserController from "./../controller/user";
 
 // Middlewares
 
 // Consts
 enum Names {
-  ROOT = "/",
-  PARAM = "/:id",
+  ROOT = "/user",
+  PARAM = "/user/:id",
 }
-const router: any = Router();
-// const User: any = new UserController();
+const User: any = new UserController();
 
-router.get("/", (_req, _res) => {
-  throw new Error("BROKEN"); // Express will catch this on its own.
-});
-// define the home page route
-// router.post(Names.ROOT, User.create);
-
-// // define the about route
-// router.get(Names.PARAM, User.findOne);
-
-export default router;
+export default (router) => {
+  router
+    .post(Names.ROOT, User.create)
+    .get(Names.ROOT, User.find)
+    .get(Names.PARAM, User.findOne);
+};

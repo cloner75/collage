@@ -37,7 +37,7 @@ export const mongoConnection = (
     },
     (err, _) => {
       if (err) {
-        console.log("Mongo Error:", err.messageP);
+        console.log("Mongo Is Down");
       } else {
         console.log(`Mongo Is Runnign On Port: ${port}`);
       }
