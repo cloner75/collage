@@ -3,12 +3,12 @@ import * as _ from "lodash";
 import { Request, Response } from "express";
 
 // Models
-import UserModel from "../models/user";
+import NotificationModel from "../models/notification";
 
 /**
- * TODO User Controller
+ * TODO Notification Controller
  */
-export default class User {
+export default class Notification {
   /**
    * TODO Constructor
    */
@@ -21,9 +21,8 @@ export default class User {
    */
   async create(req: Request, res: Response) {
     try {
-      _.assign(req.body, { status: 1 });
-      const createUser = await UserModel.create(req.body);
-      return res.send(createUser);
+      const createNotification = await NotificationModel.create(req.body);
+      return res.send(createNotification);
     } catch (err) {
       return res.status(500).send(err);
     }
@@ -36,8 +35,8 @@ export default class User {
    */
   async find(req: Request, res: Response) {
     try {
-      const getUsers = await UserModel.paginate({}, req.query);
-      return res.status(200).send(getUsers);
+      const getNotifications = await NotificationModel.paginate({}, req.query);
+      return res.status(200).send(getNotifications);
     } catch (err) {
       return res.status(500).send(err);
     }
@@ -50,8 +49,8 @@ export default class User {
    */
   async findOne(req: Request, res: Response) {
     try {
-      const getUser = await UserModel.paginate({ _id: req.params.id }, req.query);
-      return res.send(getUser);
+      const getNotification = await NotificationModel.paginate({ _id: req.params.id }, req.query);
+      return res.send(getNotification);
     } catch (err) {
       return res.status(500).send(err);
     }
