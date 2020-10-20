@@ -1,9 +1,7 @@
 // Packages
-import * as mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 import * as paginate from "mongoose-paginate";
 import * as timestamp from "mongoose-timestamp";
-
-const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
@@ -15,6 +13,23 @@ const userSchema = new Schema(
     family: { type: String, required: false },
     mobile: { type: String, required: false },
     avatar: { type: String, required: false },
+    room: {
+      number: { type: Number, required: true },
+      floor: { type: Number, required: true },
+    },
+    rent: {
+      price: { type: Number, required: true },
+      paid: { type: Boolean, required: true, default: false },
+    },
+    isUser: { type: Boolean, required: true, default: true },
+    score: {
+      sum: { type: Number, required: true, default: 0 }, // sum all score
+      distance: { type: Number, required: true, default: 0 }, // masafat
+      gradePointAverage: { type: Number, required: true, default: 0 }, // moadel
+      quota: { type: Number, required: true, default: 0 }, // sahmiye
+      term: { type: Number, required: true, default: 0 }, // emtiyaz term
+      usage: { type: Number, required: true, default: 0 }, // bar assass tedad term
+    },
   },
   { versionKey: false }
 );
@@ -22,7 +37,7 @@ const userSchema = new Schema(
 userSchema.plugin(paginate);
 userSchema.plugin(timestamp);
 
-const UserModel = mongoose.model("user", userSchema);
+const UserModel = model("user", userSchema);
 UserModel.createIndexes();
 
 export default UserModel;
