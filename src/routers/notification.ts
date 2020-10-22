@@ -15,6 +15,5 @@ const Notification: any = new NotificationController();
 export default (router) => {
   router
     .post(Names.ROOT, Notification.create)
-    .get(Names.ROOT, Notification.find)
-    .get(Names.SEND, Notification.send);
+    .get(Names.ROOT, Notification.find);
 };

@@ -14,12 +14,12 @@ const userSchema = new Schema(
     mobile: { type: String, required: false },
     avatar: { type: String, required: false },
     room: {
-      number: { type: Number, required: true },
-      floor: { type: Number, required: true },
+      number: { type: Number, required: false },
+      floor: { type: Number, required: false },
     },
     rent: {
-      price: { type: Number, required: true },
-      paid: { type: Boolean, required: true, default: false },
+      price: { type: Number, required: false },
+      paid: { type: Boolean, required: false, default: false },
     },
     isUser: { type: Boolean, required: true, default: true },
     score: {

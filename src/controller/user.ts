@@ -21,7 +21,7 @@ export default class User {
    */
   async create(req: Request, res: Response) {
     try {
-      _.assign(req.body, { status: 1 });
+      _.assign(req.body, { status: 1, isUser: true });
       const createUser = await UserModel.create(req.body);
       return res.send(createUser);
     } catch (err) {
@@ -50,7 +50,10 @@ export default class User {
    */
   async findOne(req: Request, res: Response) {
     try {
-      const getUser = await UserModel.paginate({ _id: req.params.id }, req.query);
+      const getUser = await UserModel.paginate(
+        { _id: req.params.id },
+        req.query
+      );
       return res.send(getUser);
     } catch (err) {
       return res.status(500).send(err);
@@ -64,7 +67,12 @@ export default class User {
    */
   async update(req: Request, res: Response) {
     try {
-      return res.send({ success: true, request: "findOne" });
+      const _id: string = String(req.params.id);
+      const updateUser: any = await UserModel.updateOne(
+        { _id },
+        { $set: req.body }
+      );
+      return updateUser.n ? res.send(updateUser) : res.sendStatus(404);
     } catch (err) {
       return res.status(500).send(err);
     }
@@ -77,7 +85,9 @@ export default class User {
    */
   async delete(req: Request, res: Response) {
     try {
-      return res.send({ success: true, request: "findOne" });
+      const _id: string = String(req.params.id);
+      const deleteUser: any = await UserModel.remove({ _id });
+      return res.sendStatus(deleteUser.n ? 200 : 404);
     } catch (err) {
       return res.status(500).send(err);
     }
