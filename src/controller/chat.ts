@@ -3,10 +3,10 @@ import * as _ from "lodash";
 import { Request, Response } from "express";
 
 // Models
-import ChatModel from "../models/chat";
+import ChatModel from "./../models/chat";
 
 /**
- * TODO Chat Controller
+ * TODO Conversation Controller
  */
 export default class Chat {
   /**
@@ -21,8 +21,8 @@ export default class Chat {
    */
   async create(req: Request, res: Response) {
     try {
-      const createChat = await ChatModel.create(req.body);
-      return res.send(createChat);
+      const createUser = await ChatModel.create(req.body);
+      return res.send(createUser);
     } catch (err) {
       return res.status(500).send(err);
     }
@@ -35,8 +35,8 @@ export default class Chat {
    */
   async find(req: Request, res: Response) {
     try {
-      const getChats = await ChatModel.paginate({}, req.query);
-      return res.status(200).send(getChats);
+      const getUsers = await ChatModel.paginate({}, req.query);
+      return res.status(200).send(getUsers);
     } catch (err) {
       return res.status(500).send(err);
     }
@@ -49,8 +49,11 @@ export default class Chat {
    */
   async findOne(req: Request, res: Response) {
     try {
-      const getChat = await ChatModel.paginate({ _id: req.params.id }, req.query);
-      return res.send(getChat);
+      const getUser = await ChatModel.paginate(
+        { _id: req.params.id },
+        req.query
+      );
+      return res.send(getUser);
     } catch (err) {
       return res.status(500).send(err);
     }
@@ -63,7 +66,12 @@ export default class Chat {
    */
   async update(req: Request, res: Response) {
     try {
-      return res.send({ success: true, request: "findOne" });
+      const _id: string = String(req.params.id);
+      const updateUser: any = await ChatModel.updateOne(
+        { _id },
+        { $set: req.body }
+      );
+      return updateUser.n ? res.send(updateUser) : res.sendStatus(404);
     } catch (err) {
       return res.status(500).send(err);
     }
@@ -76,7 +84,9 @@ export default class Chat {
    */
   async delete(req: Request, res: Response) {
     try {
-      return res.send({ success: true, request: "findOne" });
+      const _id: string = String(req.params.id);
+      const deleteUser: any = await ChatModel.remove({ _id });
+      return res.sendStatus(deleteUser.n ? 200 : 404);
     } catch (err) {
       return res.status(500).send(err);
     }

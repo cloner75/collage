@@ -3,7 +3,7 @@ import { Schema, Types, model } from "mongoose";
 import * as paginate from "mongoose-paginate";
 import * as timestamp from "mongoose-timestamp";
 
-const chatSchema = new Schema(
+const chatSchema: any = new Schema(
   {
     conversationId: { type: Types.ObjectId, required: true },
     userId: { type: Types.ObjectId, required: true },
@@ -20,7 +20,7 @@ const chatSchema = new Schema(
 chatSchema.plugin(paginate);
 chatSchema.plugin(timestamp);
 
-const UserModel = model("chat", chatSchema);
+const UserModel: any = model("chat", chatSchema);
 UserModel.createIndexes();
 
 export default UserModel;
