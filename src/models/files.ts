@@ -29,7 +29,7 @@ const fileSchema = new Schema(
 );
 
 fileSchema.plugin(paginate);
-fileSchema.plugin(timestamp);
+// fileSchema.plugin(timestamp);
 
 const UserModel = model("file", fileSchema);
 UserModel.createIndexes();

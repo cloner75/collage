@@ -2,6 +2,7 @@
 import * as mongoose from "mongoose";
 import { urlencoded, json } from "body-parser";
 import * as cors from "cors";
+import { nextTick } from "process";
 
 /**
  * TODO Return app
@@ -9,8 +10,14 @@ import * as cors from "cors";
  */
 export const appSetting = (express): any => {
   const app = express();
-  app.use(urlencoded({ extended: true }));
   app.use(json());
+  app.use(urlencoded({ extended: true }));
+  app.use((err, _req, res, next) => {
+    if (err) {
+      return res.sendStatus(400);
+    }
+    next();
+  });
   app.use(cors());
   app.use(express.static("public"));
   return app;
@@ -25,7 +32,7 @@ export const appSetting = (express): any => {
 export const mongoConnection = (
   dbName: string = "typeScript",
   port: number = 27017,
-  host: string = "localhost",
+  host: string = "localhost"
 ): void => {
   mongoose.connect(
     `mongodb://${host}:${port}/${dbName}`,
