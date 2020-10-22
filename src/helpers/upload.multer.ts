@@ -2,7 +2,7 @@
 import * as multer from "multer";
 import * as path from "path";
 import * as _ from "lodash";
-import * as jimp from "jimp";
+import * as Jimp from "jimp/es";
 
 // Conts
 import mimeTypes from "./../configs/mimeTypes";
@@ -125,7 +125,7 @@ export const resize = (cdnFile: string) => {
       blur: 5,
     },
   ];
-  jimp.read(UPLOAD.concat(cdnFile), (err, image) => {
+  Jimp.read(UPLOAD.concat(cdnFile), (err, image) => {
     for (let item of converLiset) {
       image.resize(item.width, item.height).quality(item.quality);
       item.blur ? image.blur(item.blur) : false;
