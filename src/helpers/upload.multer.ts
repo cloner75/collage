@@ -35,6 +35,65 @@ export const config = () => {
 };
 
 /**
+ * TODO Upload Files
+ */
+export const upload = (req) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { files, body } = req;
+      const { HOST } = process.env;
+      const urls = [];
+      for (let file of files) {
+        const {
+          filename: cdnFile,
+          fieldname,
+          path,
+          originalname: originalName,
+          mimetype: mimeType,
+          size,
+          encoding,
+          destination,
+        } = file;
+        const typeFile: string = mimeTypes[mimeType].type;
+        const fileUrls: object = {
+          cdnAddress: `${HOST}${cdnFile}`,
+        };
+        _.assign(fileUrls, {
+          success: true,
+          cdnAddress: `${HOST}${cdnFile}`,
+          channelId: body.channelId,
+          cdnFile,
+          userId: body.userId,
+          path,
+          originalName,
+          mimeType,
+          size,
+          typeFile,
+          typeReceive: body.type,
+          encoding,
+          destination,
+          fieldname,
+        });
+        if (_.isEqual(typeFile, "image")) {
+          _.assign(fileUrls, {
+            formats: {
+              thumbnail: `${HOST}${cdnFile}?type=thumbnail`,
+              512: `${HOST}${cdnFile}?type=512`,
+              128: `${HOST}${cdnFile}?type=128`,
+              blur: `${HOST}${cdnFile}?type=blur`,
+            },
+          });
+          exports.resizeImage(cdnFile);
+        }
+        urls.push(fileUrls);
+      }
+      resolve(urls);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+/**
  * TODO Set Resize Multer
  */
 export const resize = (cdnFile: string) => {
