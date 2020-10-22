@@ -6,12 +6,7 @@ import * as timestamp from "mongoose-timestamp";
 const conversationSchema = new Schema(
   {
     userId: { type: Types.ObjectId, required: true },
-    clientId: {
-      type: Types.ObjectId,
-      required: true,
-      index: true,
-      unique: true,
-    },
+    clientId: { type: Types.ObjectId, required: true },
     status: { type: String, required: true },
   },
   { versionKey: false }
