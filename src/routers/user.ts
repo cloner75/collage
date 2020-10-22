@@ -4,6 +4,7 @@
 import UserController from "./../controller/user";
 
 // Middlewares
+import { create, update, find, findOne, remove } from "./../middlewares/chat";
 
 // Consts
 enum Names {
@@ -14,9 +15,9 @@ const User: any = new UserController();
 
 export default (router) => {
   router
-    .post(Names.ROOT, User.create)
-    .get(Names.ROOT, User.find)
-    .get(Names.PARAM, User.findOne)
-    .put(Names.PARAM, User.update)
-    .delete(Names.PARAM, User.delete);
+    .post(Names.ROOT, create, User.create)
+    .get(Names.ROOT, find, User.find)
+    .get(Names.PARAM, findOne, User.findOne)
+    .put(Names.PARAM, update, User.update)
+    .delete(Names.PARAM, remove, User.delete);
 };

@@ -4,6 +4,7 @@
 import ChatController from "../controller/chat";
 
 // Middlewares
+import { create, update, find, findOne, remove } from "./../middlewares/chat";
 
 // Consts
 enum Names {
@@ -14,9 +15,9 @@ const Chat: any = new ChatController();
 
 export default (router) => {
   router
-    .post(Names.ROOT, Chat.create)
-    .get(Names.ROOT, Chat.find)
-    .get(Names.PARAM, Chat.findOne)
-    .put(Names.PARAM, Chat.update)
-    .delete(Names.PARAM, Chat.delete);
+    .post(Names.ROOT, create, Chat.create)
+    .get(Names.ROOT, find, Chat.find)
+    .get(Names.PARAM, findOne, Chat.findOne)
+    .put(Names.PARAM, update, Chat.update)
+    .delete(Names.PARAM, remove, Chat.delete);
 };
