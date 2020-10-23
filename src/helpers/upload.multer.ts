@@ -2,13 +2,13 @@
 import * as multer from "multer";
 import * as path from "path";
 import * as _ from "lodash";
-import * as Jimp from "jimp/es";
+import * as Jimp from "jimp";
 
 // Conts
 import mimeTypes from "./../configs/mimeTypes";
 const sizeOf = require("image-size");
 const LIMIT: number = 10;
-const UPLOAD: string = "./../uploads";
+const UPLOAD: string = path.join(__dirname, "./../uploads/");
 
 // Functions
 
@@ -19,7 +19,7 @@ export const config = () => {
   return multer({
     storage: multer.diskStorage({
       destination: (_req, _file, cb) => {
-        cb(null, path.join(__dirname, UPLOAD));
+        cb(null, UPLOAD);
       },
     }),
 
@@ -60,10 +60,8 @@ export const upload = (req) => {
         };
         _.assign(fileUrls, {
           success: true,
-          cdnAddress: `${HOST}${cdnFile}`,
-          channelId: body.channelId,
+          cdnAddress: HOST.concat(cdnFile),
           cdnFile,
-          userId: body.userId,
           path,
           originalName,
           mimeType,
@@ -83,7 +81,7 @@ export const upload = (req) => {
               blur: `${HOST}${cdnFile}?type=blur`,
             },
           });
-          exports.resizeImage(cdnFile);
+          exports.resize(cdnFile);
         }
         urls.push(fileUrls);
       }
@@ -97,7 +95,7 @@ export const upload = (req) => {
  * TODO Set Resize Multer
  */
 export const resize = (cdnFile: string) => {
-  const { height, width } = sizeOf(String(UPLOAD.concat(cdnFile)));
+  const { height, width } = sizeOf(UPLOAD.concat(cdnFile));
   const converLiset = [
     {
       fileName: `thumbnail-${cdnFile}`,
@@ -125,11 +123,11 @@ export const resize = (cdnFile: string) => {
       blur: 5,
     },
   ];
-  Jimp.read(UPLOAD.concat(cdnFile), (err, image) => {
+  Jimp.read(UPLOAD.concat(cdnFile), (_err, image) => {
     for (let item of converLiset) {
       image.resize(item.width, item.height).quality(item.quality);
       item.blur ? image.blur(item.blur) : false;
-      image.write(`./uploads/${item.fileName}`);
+      image.write(UPLOAD.concat(item.fileName));
     }
   });
 };

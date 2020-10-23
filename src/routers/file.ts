@@ -4,19 +4,19 @@
 import FileController from "../controller/files";
 
 // Middlewares
+import { config } from "./../helpers/upload.multer";
 
 // Consts
 enum Names {
-  ROOT = "/user",
-  PARAM = "/user/:id",
+  ROOT = "/file",
+  PARAM = "/file/:file",
 }
+const multer: any = config();
 const File: any = new FileController();
 
 export default (router) => {
   router
-    .post(Names.ROOT, File.create)
+    .post(Names.ROOT, multer.array("files", 15), File.create)
     .get(Names.ROOT, File.find)
-    .get(Names.PARAM, File.findOne)
-    .put(Names.PARAM, File.update)
-    .delete(Names.PARAM, File.delete);
+    .get(Names.PARAM, File.showFile);
 };

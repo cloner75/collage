@@ -1,9 +1,17 @@
 // Packages
 import * as _ from "lodash";
+import * as fs from "fs";
+import * as path from "path";
 import { Request, Response } from "express";
 
 // Models
 import FileModel from "../models/files";
+
+// Helpers
+import { upload } from "./../helpers/upload.multer";
+
+// Consts
+const CDN = path.join(__dirname, "./../uploads/");
 
 /**
  * TODO File Controller
@@ -21,7 +29,8 @@ export default class File {
    */
   async create(req: Request, res: Response) {
     try {
-      const createFile = await FileModel.create(req.body);
+      const urls = await upload(req);
+      const createFile = await FileModel.insertMany(urls);
       return res.send(createFile);
     } catch (err) {
       return res.status(500).send(err);
@@ -47,36 +56,19 @@ export default class File {
    * @param {request} req
    * @param {response} res
    */
-  async findOne(req: Request, res: Response) {
+  async showFile(req: Request, res: Response) {
     try {
-      const getFile = await FileModel.paginate({ _id: req.params.id }, req.query);
-      return res.send(getFile);
-    } catch (err) {
-      return res.status(500).send(err);
-    }
-  }
-
-  /**
-   * TODO Find One Controller
-   * @param {request} req
-   * @param {response} res
-   */
-  async update(req: Request, res: Response) {
-    try {
-      return res.send({ success: true, request: "findOne" });
-    } catch (err) {
-      return res.status(500).send(err);
-    }
-  }
-
-  /**
-   * TODO Find One Controller
-   * @param {request} req
-   * @param {response} res
-   */
-  async delete(req: Request, res: Response) {
-    try {
-      return res.send({ success: true, request: "findOne" });
+      const cdnFile = req.params.file;
+      const getFile = await FileModel.findOne({ cdnFile });
+      if (!getFile) {
+        return res.sendStatus(404);
+      }
+      res.setHeader("content-type", getFile.mimeType);
+      const reader = fs.createReadStream(CDN.concat(cdnFile));
+      // Stream
+      reader.on("data", (chunk) => res.write(chunk));
+      reader.on("error", (error) => res.end());
+      reader.on("end", () => res.end());
     } catch (err) {
       return res.status(500).send(err);
     }
