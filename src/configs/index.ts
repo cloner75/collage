@@ -17,6 +17,15 @@ export default {
     14: "Forbidden Access",
     15: "Bad Request",
   },
+  httpErrors:{
+    500: "Something went wrong in server, we will check it as soon as possible.",
+    404: "Not found.",
+    401: "Unauthorized.",
+    408: "Duplicate key error for unique variable.",
+    204: "Field Is Empty.",
+    403: "Forbidden Access",
+    400: "Bad Request",
+  },
   defaultFields: {
     user: ["_id"],
     file: ["_id"],
