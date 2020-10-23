@@ -5,6 +5,14 @@ import { Request, Response } from "express";
 // Models
 import ChatModel from "./../models/chat";
 
+// Helper
+import { initialMongoQuery } from "./../helpers/mogodb";
+
+// Consts
+enum Consts {
+  name = "chat",
+}
+
 /**
  * TODO Conversation Controller
  */
@@ -35,7 +43,8 @@ export default class Chat {
    */
   async find(req: Request, res: Response) {
     try {
-      const getUsers = await ChatModel.paginate({}, req.query);
+      const { where, options } = initialMongoQuery(req.query, Consts.name);
+      const getUsers = await ChatModel.paginate(where, options);
       return res.status(200).send(getUsers);
     } catch (err) {
       return res.status(500).send(err);
@@ -49,11 +58,10 @@ export default class Chat {
    */
   async findOne(req: Request, res: Response) {
     try {
-      const getUser = await ChatModel.paginate(
-        { _id: req.params.id },
-        req.query
-      );
-      return res.send(getUser);
+      _.assign(req.query, { _id: req.params.id });
+      const { where, options } = initialMongoQuery(req.query, Consts.name);
+      const getChat = await ChatModel.paginate(where, options);
+      return !getChat._doc.length ? res.sendStatus(404) : res.send(getChat);
     } catch (err) {
       return res.status(500).send(err);
     }

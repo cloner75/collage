@@ -5,6 +5,14 @@ import { Request, Response } from "express";
 // Models
 import ConversationModel from "./../models/conversation";
 
+// Helpers
+import { initialMongoQuery } from "./../helpers/mogodb";
+
+// Consts
+enum Consts {
+  name = "conversation",
+}
+
 /**
  * TODO Conversation Controller
  */
@@ -21,8 +29,8 @@ export default class Conversation {
    */
   async create(req: Request, res: Response) {
     try {
-      const createUser = await ConversationModel.create(req.body);
-      return res.send(createUser);
+      const createConversation = await ConversationModel.create(req.body);
+      return res.send(createConversation);
     } catch (err) {
       return res.status(500).send(err);
     }
@@ -35,8 +43,9 @@ export default class Conversation {
    */
   async find(req: Request, res: Response) {
     try {
-      const getUsers = await ConversationModel.paginate({}, req.query);
-      return res.status(200).send(getUsers);
+      const { where, options } = initialMongoQuery(req.query, Consts.name);
+      const getConversation = await ConversationModel.paginate(where, options);
+      return res.status(200).send(getConversation);
     } catch (err) {
       return res.status(500).send(err);
     }
@@ -49,10 +58,9 @@ export default class Conversation {
    */
   async findOne(req: Request, res: Response) {
     try {
-      const getUser = await ConversationModel.paginate(
-        { _id: req.params.id },
-        req.query
-      );
+      _.assign(req.query, { _id: req.params.id });
+      const { where, options } = initialMongoQuery(req.query, Consts.name);
+      const getUser = await ConversationModel.paginate(where, options);
       return res.send(getUser);
     } catch (err) {
       return res.status(500).send(err);
