@@ -2,7 +2,6 @@
 import * as mongoose from "mongoose";
 import { urlencoded, json } from "body-parser";
 import * as cors from "cors";
-import { nextTick } from "process";
 
 /**
  * TODO Return app

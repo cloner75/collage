@@ -17,4 +17,11 @@ export default {
     14: "Forbidden Access",
     15: "Bad Request",
   },
+  defaultFields: {
+    user: ["_id"],
+    file: ["_id"],
+    notificaiton: ["_id"],
+    conversation: ["_id"],
+    chat: ["_id"],
+  },
 };
