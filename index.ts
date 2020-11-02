@@ -12,6 +12,4 @@ dotenv.config();
 const app: any = appSetting(express);
 
 startServer(app, Number(process.env.PORT));
-
 app.use(routes);
- 

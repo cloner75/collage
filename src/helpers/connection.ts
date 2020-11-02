@@ -3,6 +3,9 @@ import * as mongoose from "mongoose";
 import { urlencoded, json } from "body-parser";
 import * as cors from "cors";
 
+// Connectoins
+import { IO, disconnect } from "./socket.io";
+
 /**
  * TODO Return app
  * @param {any} express
@@ -52,6 +55,18 @@ export const mongoConnection = (
 };
 
 /**
+ * TODO Connect To Socket
+ * @param {any} server
+ */
+export const socketConnection = (io) => {
+  io.on("connection", (client) => {
+    console.log("user connected", client.id);
+    // Events
+    disconnect(client);
+  });
+};
+
+/**
  *  TODO Server Runner
  * @param {any} app
  * @param {number} port
@@ -64,6 +79,7 @@ export const startServer = (
 ): void => {
   app.listen(port, () => {
     mongoConnection(process.env.DB_NAME);
+    socketConnection(IO);
     console.log(message, port);
   });
 };

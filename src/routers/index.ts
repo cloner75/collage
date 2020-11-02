@@ -7,10 +7,13 @@ import notificationRoute from "./notification";
 import chatRoute from "./chat";
 import conversationRoute from "./conversation";
 import fileRoute from "./file";
+import authorization from './authorization';
 
 // Consts
 const router: any = Router();
 
+
+authorization(router);
 userRoute(router);
 notificationRoute(router);
 chatRoute(router);
